@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class StoryController extends AbstractController
+
 {
     private $ChatGptAI;
 
@@ -19,12 +20,19 @@ class StoryController extends AbstractController
     /**
      * @Route("/story/start", name="story_start")
      */
+
+    #[Route('/story', name: 'story_start')]
     public function startStory(): JsonResponse
     {
         // Prompt pour proposer trois thèmes
         $prompt = "Propose trois thèmes intéressants pour une histoire interactive. Ces thèmes doivent être distincts et captivants.";
 
         $response = $this->ChatGptAI->requestChatGPT($prompt);
+
+        // Dump and Die pour afficher la réponse JSON brute
+        dd($response);
+
+
         return $this->json($response);
     }
 
