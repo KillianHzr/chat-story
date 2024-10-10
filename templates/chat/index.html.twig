@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+    <script>
+        const eventSource = new EventSource("{{ mercure('https://example.com/books/1')|escape('js') }}");
+        eventSource.onmessage = event => {
+            const data = JSON.parse(event.data);
+            const chatList = document.getElementById('chat-list');
+            const chatItem = document.createElement('li');
+            chatItem.classList.add('chat-item');
+            chatItem.innerHTML = `<strong>${data.author}</strong> : ${data.message}`;
+            chatList.appendChild(chatItem);
+        }
+    </script>
+{% endblock %}
+
+{% block title %}Hello ChatController!{% endblock %}
+
+{% block body %}
+<style>
+    .chat-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        min-height: 90vh;
+        font: 18px/1.5 sans-serif;
+        display: flex;
+    }
+
+    .story-container{
+        flex: 1;
+    }
+
+    .chat-container{
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        min-width: 20vw;
+        padding: 1em;
+        margin-left: 1em;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        gap: 1em;
+    }
+
+    .chat-list {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-item {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+<div class="chat-wrapper">
+
+    <div class="story-container">
+
+    </div>
+
+    <div class="chat-container">
+        <ul class="chat-list" id="chat-list">
+        </ul>
+        <div>
+            <input type="text" id="message-input" placeholder="Type your message here">
+            <button id="submit-button">Send</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
