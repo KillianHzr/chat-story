@@ -16,7 +16,7 @@ class AdminController extends AbstractController
         $userCount = $userRepository->count([]);
         $roomCount = $roomRepository->count([]);
 
-        return $this->render('admin/dashboard.html.twig', [
+        return $this->render('admin/dashboard/index.html.twig', [
             'dashboard_data' => [
                 'user_count' => $userCount,
                 'room_count' => $roomCount,
