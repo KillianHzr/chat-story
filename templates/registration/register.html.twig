@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
+
+    {{ form_start(registrationForm, {'attr': {'data-turbo': 'false'}}) }}
+
+    <label for="email">Email</label>
+    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'autocomplete': 'email', 'required': true}}) }}
+
+    <label for="username">Username</label>
+    {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'required': true}}) }}
+
+    <label for="password">Password</label>
+    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'autocomplete': 'new-password', 'required': true}}) }}
+
+    <div class="form-check mb-3">
+        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+        <label class="form-check-label" for="agreeTerms">I agree to the terms and conditions</label>
+    </div>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+    >
+
+    <button type="submit" class="btn btn-lg btn-primary">Register</button>
+
+    {{ form_end(registrationForm) }}
+{% endblock %}

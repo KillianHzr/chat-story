@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord Administrateur{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h1 class="my-4">Tableau de bord Administrateur</h1>
+
+        <div class="row">
+            <!-- Card: Utilisateurs enregistrés -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card bg-light shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Utilisateurs enregistrés</h5>
+                                <h3>{{ dashboard_data.user_count }}</h3>
+                            </div>
+                            <div>
+                                <i class="fas fa-users fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Room créées -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card bg-light shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Room créées</h5>
+                                <h3>{{ dashboard_data.room_count }}</h3>
+                            </div>
+                            <div>
+                                <i class="fas fa-door-open fa-2x text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Revenus aujourd'hui -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card bg-light shadow h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Revenus aujourd'hui</h5>
+                                <h3>{{ dashboard_data.revenue_today }} €</h3>
+                            </div>
+                            <div>
+                                <i class="fas fa-euro-sign fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphiques: Total Revenus et Total Ventes -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Total Revenus (12.04.2022 - 12.05.2022)</h6>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Profit cette semaine</h6>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="profitChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Graphique des Revenus
+        var ctx1 = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['12.04', '12.05', '12.06', '12.07', '12.08', '12.09', '12.10'],
+                datasets: [{
+                    label: 'Revenus',
+                    data: [30, 50, 40, 70, 90, 80, 100],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Graphique du Profit
+        var ctx2 = document.getElementById('profitChart').getContext('2d');
+        var profitChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                datasets: [{
+                    label: 'Ventes',
+                    data: [30, 40, 35, 50, 60, 55, 70],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                    {
+                        label: 'Revenus',
+                        data: [20, 30, 25, 40, 50, 45, 60],
+                        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}
