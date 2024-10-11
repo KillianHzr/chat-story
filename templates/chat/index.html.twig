@@ -60,10 +60,30 @@
 
 {% block body %}
 <div class="flex min-h-screen">
-    <div class="flex-1"></div>
+    <div class="flex-1 m-16 ">
+        <div class="bg-gray-300 p-6 mb-32  shadow-md text-gray-800">
+            <p id="main-story"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce interdum leo ut sollicitudin sollicitudin. Fusce faucibus, leo sed rutrum porta, purus arcu posuere felis, sed lobortis ipsum arcu quis neque. Phasellus a arcu at felis pharetra luctus. Mauris quis mi a tortor lobortis finibus.
+                Nam placerat lectus consequat, tempus mi eu, rutrum felis. Praesent vel metus at mauris luctus vulputate convallis vitae lorem. In vitae nulla et augue venenatis malesuada sed eu ipsum. Fusce ut interdum metus.
+                Vestibulum vel dignissim sem. Mauris a vulputate ante, eu interdum arcu. Sed sit amet feugiat dolor. Duis feugiat, arcu ut pellentesque scelerisque, eros lectus sollicitudin sapien, euismod semper quam tortor at est. Ut lorem nisl, scelerisque et tristique id, ultricies vel metu</p>
+        </div>
+        <!-- Choices Section -->
+        <div class="flex flex-col gap-4">
+            <div class="bg-gray-200 p-4 rounded-md cursor-pointer hover:bg-gray-300 transition" id="choice-1">
+                Choice 1: Go to the forest
+            </div>
+            <div class="bg-gray-200 p-4 rounded-md cursor-pointer hover:bg-gray-300 transition" id="choice-2">
+                Choice 2: Enter the castle
+            </div>
+            <div class="bg-gray-200 p-4 rounded-md cursor-pointer hover:bg-gray-300 transition" id="choice-3">
+                Choice 3: Talk to the stranger
+            </div>
+        </div>
+
+    </div>
     <div class="flex flex-col justify-end border p-2 pb-4 gap-2">
         <ul class="flex flex-col gap-1 " id="chat-list"></ul>
         <div class="flex items-center rounded gap-2">
+
             <input type="text" id="message-input" placeholder="Type your message here" class="p-2 bg-slate-100 rounded">
             <button id="submit-button" class="flex items-center justify-center p-1 bg-green-300 rounded text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M16.175 13H4v-2h12.175l-5.6-5.6L12 4l8 8l-8 8l-1.425-1.4z"/></svg>
