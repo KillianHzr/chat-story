@@ -1,3 +1,0 @@
-workers:
-  tailwind:
-    cmd: ['symfony', 'console', 'tailwind:build', '--watch']
