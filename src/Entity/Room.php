@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Room
 {
     #[ORM\Id]
@@ -26,7 +27,7 @@ class Room
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column]
-    private ?int $userNumber = null;
+    private ?int $userNumber = 0;
 
     #[ORM\Column]
     private ?bool $isActive = null;
@@ -45,8 +46,25 @@ class Room
 
     public function __construct()
     {
+        $this->userNumber = 0;
+        $this->isActive = true;
         $this->stories = new ArrayCollection();
         $this->messages = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime();
+        }
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -102,12 +120,12 @@ class Room
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function getIsActive(): ?bool
     {
         return $this->isActive;
     }
 
-    public function setActive(bool $isActive): static
+    public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
 

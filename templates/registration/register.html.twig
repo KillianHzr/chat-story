@@ -3,33 +3,61 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <img class="mx-auto h-10 w-auto" src="{{ asset('images/chatstorylogo.png') }}" alt="Your Company">
+            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create your account</h2>
+        </div>
 
-    <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger text-red-600" role="alert">{{ flash_error }}</div>
+            {% endfor %}
 
-    {{ form_start(registrationForm, {'attr': {'data-turbo': 'false'}}) }}
+            {{ form_start(registrationForm, {'attr': {'class': 'space-y-6', 'data-turbo': 'false'}}) }}
 
-    <label for="email">Email</label>
-    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'autocomplete': 'email', 'required': true}}) }}
+            <div>
+                <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+                <div class="mt-2">
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6'}}) }}
+                </div>
+            </div>
 
-    <label for="username">Username</label>
-    {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'required': true}}) }}
+            <div>
+                <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                <div class="mt-2">
+                    {{ form_widget(registrationForm.username, {'attr': {'class': 'block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6'}}) }}
+                </div>
+            </div>
 
-    <label for="password">Password</label>
-    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'autocomplete': 'new-password', 'required': true}}) }}
+            <div>
+                <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                <div class="mt-2">
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6'}}) }}
+                </div>
+            </div>
 
-    <div class="form-check mb-3">
-        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
-        <label class="form-check-label" for="agreeTerms">I agree to the terms and conditions</label>
+            <div class="flex items-center">
+                <div class="form-check">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500'}}) }}
+                </div>
+                <label for="agreeTerms" class="ml-2 block text-sm font-medium leading-6 text-gray-900">I agree to the terms and conditions</label>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div>
+                <button type="submit" class="flex w-full justify-center rounded-md bg-blue-500 px-3 p-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+                    Register
+                </button>
+            </div>
+
+            {{ form_end(registrationForm) }}
+
+            <p class="mt-10 text-center text-sm text-gray-500">
+                Already have an account?
+                <a href="{{ path('app_login') }}" class="font-semibold leading-6 text-blue-500 hover:text-blue-400">Sign in</a>
+            </p>
+        </div>
     </div>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <button type="submit" class="btn btn-lg btn-primary">Register</button>
-
-    {{ form_end(registrationForm) }}
 {% endblock %}
