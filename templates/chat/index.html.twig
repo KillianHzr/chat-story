@@ -2,70 +2,72 @@
 {% block javascripts %}
     <script>
         const eventSource = new EventSource("{{ mercure('https://example.com/books/1')|escape('js') }}");
+
         eventSource.onmessage = event => {
             const data = JSON.parse(event.data);
+            console.log(data);
             const chatList = document.getElementById('chat-list');
             const chatItem = document.createElement('li');
             chatItem.classList.add('chat-item');
             chatItem.innerHTML = `<strong>${data.author}</strong> : ${data.message}`;
             chatList.appendChild(chatItem);
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const submitButton = document.getElementById('submit-button');
+            const messageInput = document.getElementById('message-input');
+
+            const sendMessage = () => {
+                const message = messageInput.value;
+                console.log({
+                    "message" : message,
+                    "author" : "{{ app.user.username }}"
+                });
+                fetch("{{ path('app_chat') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({
+                        "message" : message,
+                        "author" : "{{ app.user.username }}"
+                    })
+                })
+                    .then(response => {
+                        if(response.status !== 200){
+                            throw new Error('Failed to send message');
+                        }
+                    })
+                    .then(data => {
+                        messageInput.value = '';
+                    })
+            };
+
+            submitButton.addEventListener('click', sendMessage);
+
+            messageInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+        });
     </script>
 {% endblock %}
 
 {% block title %}Hello ChatController!{% endblock %}
 
 {% block body %}
-<style>
-    .chat-wrapper {
-        margin: 1em auto;
-        max-width: 800px;
-        min-height: 90vh;
-        font: 18px/1.5 sans-serif;
-        display: flex;
-    }
-
-    .story-container{
-        flex: 1;
-    }
-
-    .chat-container{
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        min-width: 20vw;
-        padding: 1em;
-        margin-left: 1em;
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
-        gap: 1em;
-    }
-
-    .chat-list {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .chat-item {
-        display: flex;
-        align-items: center;
-    }
-</style>
-
-<div class="chat-wrapper">
-
-    <div class="story-container">
-
-    </div>
-
-    <div class="chat-container">
-        <ul class="chat-list" id="chat-list">
-        </ul>
-        <div>
-            <input type="text" id="message-input" placeholder="Type your message here">
-            <button id="submit-button">Send</button>
+<div class="flex min-h-screen">
+    <div class="flex-1"></div>
+    <div class="flex flex-col justify-end border p-2 pb-4 gap-2">
+        <ul class="flex flex-col gap-1 " id="chat-list"></ul>
+        <div class="flex items-center rounded gap-2">
+            <input type="text" id="message-input" placeholder="Type your message here" class="p-2 bg-slate-100 rounded">
+            <button id="submit-button" class="flex items-center justify-center p-1 bg-green-300 rounded text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M16.175 13H4v-2h12.175l-5.6-5.6L12 4l8 8l-8 8l-1.425-1.4z"/></svg>
+            </button>
         </div>
     </div>
 </div>
