@@ -43,6 +43,7 @@
         "symfony/ux-turbo": "^2.20",
         "symfony/validator": "7.1.*",
         "symfony/web-link": "7.1.*",
+        "symfony/webpack-encore-bundle": "^2.2",
         "symfony/yaml": "7.1.*",
         "symfonycasts/tailwind-bundle": "^0.6.0",
         "symfonycasts/verify-email-bundle": "^1.17",
