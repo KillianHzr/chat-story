@@ -18,18 +18,16 @@ class RoomType extends AbstractType
             ->add('timer')
             ->add('createdAt', DateTimeType::class, [
                 'widget' => 'single_text',
-                'disabled' => true, // Affiché mais non modifiable
+                'disabled' => true,
             ])
             ->add('updatedAt', DateTimeType::class, [
                 'widget' => 'single_text',
-                'disabled' => true, // Affiché mais non modifiable
+                'disabled' => true,
             ])
             ->add('userNumber', IntegerType::class, [
-                'disabled' => true, // Affiché mais non modifiable
+                'disabled' => true,
             ])
-            ->add('isActive', CheckboxType::class, [
-                'disabled' => true, // Affiché mais non modifiable
-            ]);
+            ->add('isActive');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

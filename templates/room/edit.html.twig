@@ -3,11 +3,19 @@
 {% block title %}Edit Room{% endblock %}
 
 {% block body %}
-    <h1>Edit Room</h1>
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Edit Room</h2>
+        </div>
 
-    {{ include('room/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            {# Include the form partial and pass 'Update' as the button label #}
+            {{ include('room/_form.html.twig', {'button_label': 'Update'}) }}
+            {{ include('room/_delete_form.html.twig', {'button_label': 'Delete'}) }}
 
-    <a href="{{ path('app_room_index') }}">back to list</a>
-
-    {{ include('room/_delete_form.html.twig') }}
+            <p class="mt-6 text-center">
+                <a href="{{ path('app_room_index') }}" class="font-semibold leading-6 text-blue-500 hover:text-blue-400">Back to list</a>
+            </p>
+        </div>
+    </div>
 {% endblock %}

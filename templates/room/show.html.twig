@@ -3,40 +3,50 @@
 {% block title %}Room{% endblock %}
 
 {% block body %}
-    <h1>Room</h1>
+    <div class="p-6 bg-white rounded-lg">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Room Details</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ room.id }}</td>
+        <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <tbody class="divide-y divide-gray-200">
+            <tr class="bg-gray-50">
+                <th class="px-6 py-4 text-left font-medium text-gray-900">Id</th>
+                <td class="px-6 py-4 text-gray-700">{{ room.id }}</td>
             </tr>
             <tr>
-                <th>Timer</th>
-                <td>{{ room.timer }}</td>
+                <th class="px-6 py-4 text-left font-medium text-gray-900">Timer</th>
+                <td class="px-6 py-4 text-gray-700">{{ room.timer }}</td>
+            </tr>
+            <tr class="bg-gray-50">
+                <th class="px-6 py-4 text-left font-medium text-gray-900">Created At</th>
+                <td class="px-6 py-4 text-gray-700">{{ room.createdAt ? room.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
-                <td>{{ room.createdAt ? room.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <th class="px-6 py-4 text-left font-medium text-gray-900">Updated At</th>
+                <td class="px-6 py-4 text-gray-700">{{ room.updatedAt ? room.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr class="bg-gray-50">
+                <th class="px-6 py-4 text-left font-medium text-gray-900">User Number</th>
+                <td class="px-6 py-4 text-gray-700">{{ room.userNumber }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
-                <td>{{ room.updatedAt ? room.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <th class="px-6 py-4 text-left font-medium text-gray-900">Is Active</th>
+                <td class="px-6 py-4 text-gray-700">
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ room.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                            {{ room.isActive ? 'Yes' : 'No' }}
+                        </span>
+                </td>
             </tr>
-            <tr>
-                <th>UserNumber</th>
-                <td>{{ room.userNumber }}</td>
-            </tr>
-            <tr>
-                <th>IsActive</th>
-                <td>{{ room.isActive ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_room_index') }}">back to list</a>
-
-    <a href="{{ path('app_room_edit', {'id': room.id}) }}">edit</a>
-
-    {{ include('room/_delete_form.html.twig') }}
+        <div class="mt-6 flex space-x-4">
+            <a href="{{ path('app_room_index') }}" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Back to list
+            </a>
+            <a href="{{ path('app_room_edit', {'id': room.id}) }}" class="px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                Edit
+            </a>
+            {{ include('room/_delete_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}

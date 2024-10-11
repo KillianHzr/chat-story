@@ -15,7 +15,9 @@
         {% endblock %}
     </head>
     <body>
-        <main>
+        {% include 'admin/_nav.html.twig' %}
+
+        <main class="p-4 mt-16 sm:ml-64">
                 {% block body %}{% endblock %}
         </main>
     </body>

@@ -3,8 +3,6 @@
 {% block title %}Room index{% endblock %}
 
 {% block body %}
-    <h1>Room index</h1>
-
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -34,7 +32,7 @@
                         </div>
                     </td>
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ room.id }}
+                        #{{ room.id }}
                     </th>
                     <td class="px-6 py-4">{{ room.timer }}</td>
                     <td class="px-6 py-4">{{ room.createdAt ? room.createdAt|date('Y-m-d H:i:s') : '' }}</td>
@@ -42,9 +40,9 @@
                     <td class="px-6 py-4">{{ room.userNumber }}</td>
                     <td class="px-6 py-4">{{ room.isActive ? 'Yes' : 'No' }}</td>
                     <td class="flex items-center px-6 py-4">
-                        <a href="{{ path('app_room_show', {'id': room.id}) }}" class="font-medium text-blue-600 hover:underline">Show</a>
-                        <a href="{{ path('app_room_edit', {'id': room.id}) }}" class="font-medium text-blue-600 hover:underline ml-3">Edit</a>
-                        <div class="font-medium text-red-600 hover:underline ml-3">
+                        <a href="{{ path('app_room_show', {'id': room.id}) }}" class="flex justify-center rounded-md bg-blue-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ml-3">Show</a>
+                        <a href="{{ path('app_room_edit', {'id': room.id}) }}" class="flex justify-center rounded-md bg-yellow-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 ml-3">Edit</a>
+                        <div class="font-medium ml-3">
                             {{ include('room/_delete_form.html.twig') }}
                         </div>
                     </td>

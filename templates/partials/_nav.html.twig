@@ -29,6 +29,11 @@
                             {% if app.user %}
                                 <div class="flex gap-3">
                                     <a href="{{ path('app_logout') }}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Logout</a>
+
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('admin_dashboard') }}" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Dashboard</a>
+                                    {% endif %}
+
                                     <a href="{{ path('user_profile_edit') }}" type="button" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 h-fit" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                         <img class="h-8 w-8 rounded-full" src="{{ app.user.image ? asset('uploads/profile_pictures/' ~ app.user.image) : asset('images/default_profile.png') }}" alt="{{ app.user.username }}">
                                     </a>
@@ -67,6 +72,9 @@
                     Rooms
                 </a>
                 {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('admin_dashboard') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Dashboard</a>
+                    {% endif %}
                     <a href="{{ path('app_logout') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Logout</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Login</a>
