@@ -47,7 +47,7 @@ class ChatGptAI
             'json' => array_merge([
                 'model' => 'gpt-4o-2024-08-06',
                 'messages' => [
-                    ['role' => 'user', 'content' => "Gènere une présentation globale indiquant a l'utilisateur qu'il vas participer a la création d'une histoire intéractive , propose lui 3 choix de thèmes différents pour géneré une histoire."],
+                    ['role' => 'user', 'content' => "Génère une présentation globale indiquant a l'utilisateur qu'il vas participer a la création d'une histoire intéractive , propose lui 3 choix de thèmes différents pour générer une histoire."],
                     ['role' => 'system', 'content' => "Tu es un assistant qui permet d'écrire un histoire à choix multiples. Ton rôle est narrateur, ton but est de rédiger des parties d'histoires puis de proposer des choix qui guideront la suite de l'histoire. 
                     L'histoire doit être cohérente et suivre une chronologie logique. Le thème doit être le même. A la fin de chaque partie, tu dois proposer 3 choix. 
                     Renvoie un string au format JSON, avec un champ 'choices' (tableau de string) un champ 'story' (string) "]

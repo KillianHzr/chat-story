@@ -26,7 +26,6 @@ class Story
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'stories')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Room;
+use App\Entity\Story;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,17 @@ class RoomRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function getLastStory(Room $room): ?int
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('MAX(s.id)')
+            ->from('App\Entity\Story', 's')
+            ->where('s.room = :room')
+            ->setParameter('room', $room)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $qb;
+    }
 }

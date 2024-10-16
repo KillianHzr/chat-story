@@ -1,0 +1,71 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Room index{% endblock %}
+
+{% block body %}
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="p-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3">Id</th>
+                <th scope="col" class="px-6 py-3">Created At</th>
+                <th scope="col" class="px-6 py-3">Email</th>
+                <th scope="col" class="px-6 py-3">Username</th>
+                <th scope="col" class="px-6 py-3">Is Active</th>
+                <th scope="col" class="px-6 py-3">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                    <tr class="{{ user.id == currentUserId ? 'bg-blue-50 border-b' :'bg-white border-b' }}">
+                    {% if user.id == currentUserId %}
+                        <td></td>
+                    {% else %}
+                        <td class="w-4 p-4">
+                            <div class="flex items-center">
+                                <input id="checkbox-table-search-{{ user.id }}" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                                <label for="checkbox-table-search-{{ user.id }}" class="sr-only">checkbox</label>
+                            </div>
+                        </td>
+                    {% endif %}
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        #{{ user.id }}
+                    </th>
+                    <td class="px-6 py-4">{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td class="px-6 py-4">{{ user.email }}</td>
+                    <td class="px-6 py-4 flex items-center gap-3">
+                        {% if user.image != null %}
+                            <img src="{{ asset('uploads/profile_pictures/' ~ user.image) }}" class="w-6 h-6 rounded-full" alt="{{ user.username }}">
+                        {% else %}
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                {{ user.username|slice(0, 1) }}
+                            </div>
+                        {% endif %}
+                        {{ user.username }}
+                    </td>
+                    <td class="px-6 py-4">{{ user.roles|join(', ') }}</td>
+                    <td class="flex items-center px-6 py-4">
+{#                        <a href="{{ path('app_room_show', {'id': user.id}) }}" class="flex justify-center rounded-md bg-blue-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ml-3">Show</a>#}
+{#                        <a href="{{ path('app_room_edit', {'id': user.id}) }}" class="flex justify-center rounded-md bg-yellow-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500 ml-3">Edit</a>#}
+{#                        <div class="font-medium ml-3">#}
+{#                            {{ include('room/_delete_form.html.twig') }}#}
+{#                        </div>#}
+                    </td>
+                </tr>
+            {% else %}
+                <tr class="bg-white border-b hover:bg-gray-50">
+                    <td colspan="7" class="px-6 py-4 text-center">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ path('app_room_new') }}" class="inline-block mt-4 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">Create new</a>
+{% endblock %}

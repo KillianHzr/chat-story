@@ -2,80 +2,95 @@
 
 namespace App\Controller;
 
+use App\Entity\Choice;
 use App\Entity\Room;
+use App\Entity\Story;
 use App\Form\RoomType;
+use App\Repository\ChoiceRepository;
 use App\Repository\RoomRepository;
+use App\Service\ChatGptAI;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/room')]
+#[Route('/room')]
 final class RoomController extends AbstractController
 {
-    #[Route(name: 'app_room_index', methods: ['GET'])]
-    public function index(RoomRepository $roomRepository): Response
+    #[Route('/{id}', name: 'chat_room_show', methods: ['GET'])]
+    public function show(Room $room, RoomRepository $roomRepository): Response
     {
-        return $this->render('room/index.html.twig', [
-            'rooms' => $roomRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_room_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $room = new Room();
-        $form = $this->createForm(RoomType::class, $room);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($room);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_room_index', [], Response::HTTP_SEE_OTHER);
+        $stories = $room->getStories()->toArray();
+        $storiesData = [];
+        foreach ($stories as $story) {
+            $choicesArray = $story->getChoices()->toArray();
+            $choicesData = [];
+            foreach ($choicesArray as $choice) {
+                $choicesData[] = [
+                    'id' => $choice->getId(),
+                    'choiceText' => $choice->getChoiceText(),
+                ];
+            }
+            $storiesData[] = [
+                'story' => $story->getStoryText(),
+                'choices' => $choicesData,
+            ];
         }
 
-        return $this->render('room/new.html.twig', [
+        return $this->render('room/chat.html.twig', [
             'room' => $room,
-            'form' => $form,
+            'stories' => $storiesData,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_room_show', methods: ['GET'])]
-    public function show(Room $room): Response
+    #[Route(name: 'app_init_story', methods: ['GET', 'POST'])]
+    public function initStory(Request $request, HubInterface $hub, ChatGptAI $chatGptAI, RoomRepository $roomRepository, EntityManagerInterface $entityManager): JsonResponse
     {
-        return $this->render('room/show.html.twig', [
-            'room' => $room,
-        ]);
-    }
 
-    #[Route('/{id}/edit', name: 'app_room_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Room $room, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(RoomType::class, $room);
-        $form->handleRequest($request);
+        $responseData = json_decode($request->getContent(), true);
+        $roomId = $responseData['roomId'];
+        $result = $chatGptAI->start();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+        $currentRoom = $roomRepository->find($roomId);
+        if (!$currentRoom) {
+            throw $this->createNotFoundException('La room demandée n\'existe pas.');
+        }
+        $currentRoom->setUpdatedAt(new \DateTime());
 
-            return $this->redirectToRoute('app_room_index', [], Response::HTTP_SEE_OTHER);
+        $story = new Story();
+        $story->setStoryText($result['story']);
+        $story->setCreatedAt(new \DateTime());
+        $story->setUpdatedAt(new \DateTime());
+
+        $choices = $result['choices'];
+        foreach ($choices as $choice) {
+            $newChoice = new Choice();
+            $newChoice->setChoiceText($choice);
+            $newChoice->setVoteCount(0);
+            $newChoice->setSelected(false);
+            $story->addChoice($newChoice);
+            $entityManager->persist($newChoice);
         }
 
-        return $this->render('room/edit.html.twig', [
-            'room' => $room,
-            'form' => $form,
-        ]);
-    }
+        $entityManager->persist($story);
+        $currentRoom->addStory($story);
 
-    #[Route('/{id}', name: 'app_room_delete', methods: ['POST'])]
-    public function delete(Request $request, Room $room, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$room->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($room);
-            $entityManager->flush();
+        $entityManager->persist($currentRoom);
+
+        $entityManager->flush();
+
+        $choicesArray = $story->getChoices()->toArray();
+        $choicesData = [];
+        foreach ($choicesArray as $choice) {
+            $choicesData[] = [
+                'id' => $choice->getId(),
+                'choiceText' => $choice->getChoiceText(),
+            ];
         }
 
-        return $this->redirectToRoute('app_room_index', [], Response::HTTP_SEE_OTHER);
+        return new JsonResponse(data: ['story' => $story->getStoryText(), 'choices' => $choicesData], status: Response::HTTP_OK, headers: ['Content-Type' => 'application/json']);
     }
 }

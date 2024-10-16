@@ -35,7 +35,7 @@ class Room
     /**
      * @var Collection<int, Story>
      */
-    #[ORM\OneToMany(targetEntity: Story::class, mappedBy: 'room')]
+    #[ORM\OneToMany(targetEntity: Story::class, mappedBy: 'room', fetch: "EAGER")]
     private Collection $stories;
 
     /**
